@@ -42,7 +42,7 @@ except Exception as e:
 
 # Header row
 csv_data.append(["title", "source","source_identifier", "source_metadata_identifier",
-"model", "purl", "parents", "series", "related_url", "files", "pdf_state"]) # Note: added 'parents' to the header
+"model", "purl", "parents", "series", "related_url", "file", "pdf_state"]) # Note: added 'parents' to the header
 
 # Iterate through current directory entries
 for entry in current_path.iterdir():
@@ -104,4 +104,5 @@ with open(OUTPUT_FILENAME, 'w', newline='', encoding='utf-8') as csvfile:
     csv_writer = csv.writer(csvfile)
     csv_writer.writerows(csv_data)
     
+
 print(f"Successfully created manifest file: {OUTPUT_FILENAME}")
