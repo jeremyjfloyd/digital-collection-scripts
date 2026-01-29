@@ -40,9 +40,19 @@ except Exception as e:
 
 # --- 2. Build the Output CSV Data ---
 
+# 1. Ask for user input ONCE at the start
+print("--- Manifest Configuration ---")
+user_parents = input("Input parents [default: pz50gz79h]: ") or "pz50gz79h"
+user_related_url = input("Input related url [default: https://purl.dlib.indiana.edu/iudl/findingaids/africanstudies/VAA9500]: ") or "https://purl.dlib.indiana.edu/iudl/findingaids/africanstudies/VAA9500"
+user_purl_prefix = input("Input purl prefix [default: http://purl.dlib.indiana.edu/iudl/africanstudies/]: ") or "http://purl.dlib.indiana.edu/iudl/africanstudies/"
+print(f"Using Parents: {user_parents}")
+print(f"Using Related URL: {user_related_url}\n")
+print(f"Using Purl Preix: {user_purl_prefix}")
+
+
 # Header row
 csv_data.append(["title", "source","source_identifier", "source_metadata_identifier",
-"model", "purl", "parents", "series", "related_url", "file", "pdf_state"]) # Note: added 'parents' to the header
+"model", "purl", "parents", "series", "related_url", "file", "pdf_state"])
 
 # Iterate through current directory entries
 for entry in current_path.iterdir():
@@ -50,7 +60,7 @@ for entry in current_path.iterdir():
     if entry.is_dir():
         directory_name = entry.name
         
-        # 📌 The common key: directory_name
+        # The common key: directory_name
         source_metadata_identifier = directory_name
         
         # --- Metadata Lookup ---
@@ -74,17 +84,17 @@ for entry in current_path.iterdir():
         
         files_string = ";".join(files_list)
         
+
         # Adding the other required fields
         source = directory_name
         source_identifier = directory_name
         model = "ArchivalMaterial"
-        purl = "http://purl.dlib.indiana.edu/iudl/africanstudies/"+directory_name
-        parents = "pz50gz79h"
+        purl = user_purl_prefix+directory_name
+        parents = user_parents
         series = ""
-        related_url = "https://purl.dlib.indiana.edu/iudl/findingaids/africanstudies/VAA9500"
+        related_url = user_related_url
         pdf_state = "downloadable"
         
-
         csv_data.append([
             title,
             source,
@@ -104,5 +114,4 @@ with open(OUTPUT_FILENAME, 'w', newline='', encoding='utf-8') as csvfile:
     csv_writer = csv.writer(csvfile)
     csv_writer.writerows(csv_data)
     
-
 print(f"Successfully created manifest file: {OUTPUT_FILENAME}")
